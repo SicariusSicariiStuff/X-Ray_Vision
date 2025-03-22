@@ -23,6 +23,8 @@ pip install accelerate
 # Running inference
 
 Usage:
+write your custom prompts in prompts.txt, each line is a new prompt, 3 prompts will result in 3 inferences.
+You can use the default prompt that is already in prompts.txt - it is recommended.
 ```
 python xRay-Vision.py /path/to/model/ /dir/with/images/
 ```
