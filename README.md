@@ -1,6 +1,10 @@
 # This is a pre-alpha POC (Proof Of Concept)
 
 ## Instructions:
+clone:
+```
+git clone https://github.com/SicariusSicariiStuff/X-Ray_Vision.git
+```
 
 Settings up venv, (tested for python 3.11, probably works with 3.10)
 ```
