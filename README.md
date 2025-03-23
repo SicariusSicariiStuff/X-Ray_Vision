@@ -1,4 +1,6 @@
 # This is a pre-alpha POC (Proof Of Concept)
+Model:
+https://huggingface.co/SicariusSicariiStuff/X-Ray_Alpha
 
 ## Instructions:
 clone:
