@@ -6,6 +6,7 @@ https://huggingface.co/SicariusSicariiStuff/X-Ray_Alpha
 clone:
 ```
 git clone https://github.com/SicariusSicariiStuff/X-Ray_Vision.git
+cd X-Ray_Vision/
 ```
 
 Settings up venv, (tested for python 3.11, probably works with 3.10)
