@@ -23,12 +23,10 @@ def load_prompts(prompts_file_path="./prompts.txt"):
 
 def create_output_directories(image_path, prompt_count):
     """Create output directories for each prompt."""
-    # Create base output directory
     base_dir = os.path.dirname(image_path.rstrip('/'))
     dir_name = os.path.basename(image_path.rstrip('/'))
     output_base = os.path.join(base_dir, f"{dir_name}_TXT")
 
-    # Create numbered directories for each prompt
     prompt_dirs = []
     for i in range(1, prompt_count + 1):
         prompt_dir = os.path.join(output_base, str(i))
@@ -38,29 +36,24 @@ def create_output_directories(image_path, prompt_count):
     return prompt_dirs
 
 def test_model(model_path, image_path):
-    """Test model on image(s) with prompts from prompts.txt and save outputs to numbered directories."""
-    # Device setup
+    """Test model on image(s) with prompts from prompts.txt and save outputs."""
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Using device: {device}")
-
-    # Load model
-    print(f"Loading model from {model_path}")
     torch_dtype = torch.bfloat16 if device == "cuda" else torch.float32
+
+    print(f"Using device: {device}")
+    print(f"Loading model from {model_path}")
+
     model = AutoModelForImageTextToText.from_pretrained(
         model_path,
-        device_map=device,
+        device_map="auto",  # Enables multi-GPU balancing
         torch_dtype=torch_dtype,
         attn_implementation="eager"
     )
     processor = AutoProcessor.from_pretrained(model_path)
 
-    # Load prompts
     prompts = load_prompts()
-
-    # Create output directories
     prompt_dirs = create_output_directories(image_path, len(prompts))
 
-    # Handle directory or single image
     if os.path.isdir(image_path):
         image_files = glob.glob(os.path.join(image_path, "*.jpg")) + \
                       glob.glob(os.path.join(image_path, "*.jpeg")) + \
@@ -70,7 +63,6 @@ def test_model(model_path, image_path):
         image_files = [image_path]
         print(f"Processing single image: {image_path}")
 
-    # Process each image
     for img_file in image_files:
         filename = os.path.basename(img_file)
         base_filename = os.path.splitext(filename)[0]
@@ -79,7 +71,6 @@ def test_model(model_path, image_path):
         try:
             image = Image.open(img_file).convert("RGB")
 
-            # Process each prompt for this image
             for prompt_idx, prompt_text in enumerate(prompts):
                 prompt_dir = prompt_dirs[prompt_idx]
                 output_file = os.path.join(prompt_dir, f"{base_filename}.txt")
@@ -118,7 +109,6 @@ def test_model(model_path, image_path):
                 output_text = processor.batch_decode(outputs, skip_special_tokens=True)[0]
                 print(f"Output: {output_text}")
 
-                # Save output to the corresponding directory
                 with open(output_file, 'w', encoding='utf-8') as f:
                     f.write(output_text)
 
@@ -134,5 +124,4 @@ if __name__ == "__main__":
 
     model_path = sys.argv[1]
     image_path = sys.argv[2]
-
     test_model(model_path, image_path)
