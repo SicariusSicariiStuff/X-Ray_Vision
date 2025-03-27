@@ -1,4 +1,4 @@
-# This is a pre-alpha POC (Proof Of Concept)
+# This is a pre-alpha POC (Proof Of Concept) [update: added multi GPU support]
 Model:
 https://huggingface.co/SicariusSicariiStuff/X-Ray_Alpha
 
